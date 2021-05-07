@@ -29,4 +29,24 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     get users_path
     assert_select 'a', text: 'delete', count: 0
   end
+  
+  test "index page shows only activated users" do
+    log_in_as(@admin)
+    get users_path
+    first_page_of_users = User.paginate(page: 1)
+    first_page_of_users.each do |user|
+      assert_select 'a[href=?]', user_path(user), text: user.name
+      assert user.activated?
+    end
+  end
+  
+  test "only login user can see own profile page" do
+    log_in_as(@admin)
+    get user_path(@admin)
+    assert_template 'users/show'
+    get user_path(@non_admin)
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_template 'static_pages/home'
+  end
 end

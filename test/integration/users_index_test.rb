@@ -40,13 +40,14 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     end
   end
   
-  test "only login user can see own profile page" do
-    log_in_as(@admin)
-    get user_path(@admin)
-    assert_template 'users/show'
-    get user_path(@non_admin)
-    assert_redirected_to root_url
-    follow_redirect!
-    assert_template 'static_pages/home'
-  end
+  # 他のユーザーのプロフィールページを見れるように変更したため削除
+  # test "only login user can see own profile page" do
+  #   log_in_as(@admin)
+  #   get user_path(@admin)
+  #   assert_template 'users/show'
+  #   get user_path(@non_admin)
+  #   assert_redirected_to root_url
+  #   follow_redirect!
+  #   assert_template 'static_pages/home'
+  # end
 end
